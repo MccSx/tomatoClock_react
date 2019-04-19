@@ -13,11 +13,11 @@ const instance = axios.create({
 });
 
 // Add a request interceptor
-axios.interceptors.request.use(function (config) {
+instance.interceptors.request.use(function (config) {
     // Do something before request is sent
     const myToken = localStorage.getItem('x-token')
     if (myToken) {
-        config.headers['x-token'] = myToken
+        config.headers['Authorization'] = `Bearer ${myToken}`
     }
     return config;
 }, function (error) {
@@ -26,7 +26,7 @@ axios.interceptors.request.use(function (config) {
 });
 
 // Add a response interceptor
-axios.interceptors.response.use(function (response) {
+instance.interceptors.response.use(function (response) {
     // Do something with response data
     if (response.headers['x-token']) {
         localStorage.setItem('x-token', response.headers['x-token'])
